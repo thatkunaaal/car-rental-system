@@ -1,6 +1,7 @@
 "use strict";
 const { Enum } = require("../utils/common");
 const { BOOKED, CANCELLED, COMPLETED } = Enum.BOOKING_TYPE;
+const { users } = require("../models");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -14,11 +15,11 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
-          model: "users",
+          model: users,
           key: "id",
         },
+        allowNull: false,
       },
       car_name: {
         type: Sequelize.STRING,

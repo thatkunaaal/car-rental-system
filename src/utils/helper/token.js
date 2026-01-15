@@ -28,6 +28,17 @@ async function getJWT(payload) {
   }
 }
 
+function validateJWT(token) {
+  return new Promise((res, rej) => {
+    jwt.verify(token, ServerConfig.SECRET_KEY, (err, payload) => {
+      if (err) rej(err);
+
+      res(payload);
+    });
+  });
+}
+
 module.exports = {
   getJWT,
+  validateJWT,
 };

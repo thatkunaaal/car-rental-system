@@ -57,7 +57,26 @@ async function login(data) {
   }
 }
 
+async function verifyToken(token) {
+  try {
+    const payload = await TokenUtil.validateJWT(token);
+
+    const { userId, username } = payload;
+
+    const user = await UserRepo.get(userId);
+
+    if (!user) {
+      throw new AppError("Token invalid", StatusCodes.UNAUTHORIZED);
+    }
+
+    return payload;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   signup,
   login,
+  verifyToken,
 };
