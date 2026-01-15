@@ -11,7 +11,7 @@ async function signup(req, res) {
       password: req.body.password,
     });
 
-    SuccessResponse.data = user;
+    SuccessResponse.data = { userId: user.id };
 
     return res.status(StatusCodes.CREATED).json(SuccessResponse);
   } catch (error) {
@@ -21,15 +21,36 @@ async function signup(req, res) {
       return res.status(error.StatusCodes).json(ErrorResponse);
     }
 
-    Logger.error(
-      { msg: error.message },
-      { error: error.stack }
-    );
+    Logger.error({ msg: error.message }, { error: error.stack });
 
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+  }
+}
+
+async function login(req, res) {
+  try {
+    const token = await UserService.login({
+      username: req.body.username,
+      password: req.body.password,
+    });
+
+    SuccessResponse.message = "Login successful";
+    SuccessResponse.data = { token };
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+
+    if (error instanceof AppError) {
+      return res.status(error.StatusCodes).json(ErrorResponse);
+    }
+
+    Logger.error({ msg: error.message }, { error: error.stack });
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
   }
 }
 
 module.exports = {
   signup,
+  login,
 };

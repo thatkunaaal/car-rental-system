@@ -3,11 +3,21 @@ const { UserController } = require("../../controllers");
 const { AuthMiddleware } = require("../../middleware");
 const router = express.Router();
 
+
+/*
+    POST: /signup
+    {username , password}
+*/
 router.post(
   "/signup",
   AuthMiddleware.validateSignupRequest,
   UserController.signup
 );
-// router.post("/login");
+
+/*
+    POST: /login
+    {username , password}
+*/
+router.post("/login",AuthMiddleware.validateSignupRequest,UserController.login);
 
 module.exports = router;
