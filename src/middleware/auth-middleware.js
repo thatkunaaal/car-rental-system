@@ -65,7 +65,38 @@ async function validateJWT(req, res, next) {
   }
 }
 
+function validateGetBookings(req, res, next) {
+  if (!req.query.bookingId && !req.query.summary) {
+    ErrorResponse.error = { explanation: "BookingId is missing" };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  next();
+}
+
+function validateUpdateBooking(req, res, next) {
+  if (!req.body) {
+    ErrorResponse.error = { explanation: "Invalid inputs" };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  if (
+    req.body.status ||
+    (req.body.carName && req.body.days && req.body.rentPerDay)
+  ) {
+    next();
+  } else {
+    ErrorResponse.error = { explanation: "Invalid inputs" };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   validateSignupRequest,
   validateJWT,
+  validateGetBookings,
+  validateUpdateBooking,
 };
