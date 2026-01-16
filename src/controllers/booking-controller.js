@@ -79,8 +79,31 @@ async function updateBooking(req, res) {
   }
 }
 
+async function deleteBooking(req, res) {
+  try {
+    const booking = await BookingService.deleteBooking({
+      userId: req.user.userId,
+      id: req.params.bookingId,
+    });
+
+    SuccessResponse.message = "Booking deleted successfully";
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+
+    if (error instanceof AppError) {
+      return res.status(error.StatusCodes).json(ErrorResponse);
+    }
+
+    Logger.error({ msg: error.message }, { error: error.stack });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(ErrorResponse);
+  }
+}
+
 module.exports = {
   create,
   getBooking,
   updateBooking,
+  deleteBooking,
 };

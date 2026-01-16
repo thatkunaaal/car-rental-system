@@ -152,7 +152,43 @@ async function updateBooking(data) {
 
       throw new AppError(explanation, StatusCodes.CONFLICT);
     }
+  }
 
+  throw error;
+}
+
+async function deleteBooking(data) {
+  try {
+    const { userId, id } = data;
+    const booking = await BookingRepo.get(id);
+
+    if (!booking) {
+      throw new AppError("booking not found", StatusCodes.NOT_FOUND);
+    }
+
+    const pojoBooking = booking.toJSON();
+    
+    if (pojoBooking.user_id != userId) {
+      throw new AppError(
+        "Booking does not belong to this user",
+        StatusCodes.FORBIDDEN
+      );
+    }
+
+    const deleteBooking = await BookingRepo.destroy(id);
+
+    return deleteBooking;
+  } catch (error) {
+    if (error.name == "SequelizeValidationError") {
+      let explanation = [];
+
+      explanation = error.errors.map((err) => {
+        const errResponse = err.message + ": " + err.value;
+        return errResponse;
+      });
+
+      throw new AppError(explanation, StatusCodes.CONFLICT);
+    }
     throw error;
   }
 }
@@ -161,4 +197,5 @@ module.exports = {
   create,
   getBooking,
   updateBooking,
+  deleteBooking,
 };

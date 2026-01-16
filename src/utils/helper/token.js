@@ -5,13 +5,18 @@ const { ErrorResponse } = require("../common");
 
 function generateJWT(payload) {
   return new Promise((res, rej) => {
-    jwt.sign(payload, ServerConfig.SECRET_KEY, function (err, token) {
-      if (err) {
-        rej(err);
-      }
+    jwt.sign(
+      payload,
+      ServerConfig.SECRET_KEY,
+      { expiresIn: "24h" },
+      function (err, token) {
+        if (err) {
+          rej(err);
+        }
 
-      res(token);
-    });
+        res(token);
+      }
+    );
   });
 }
 

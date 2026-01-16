@@ -10,6 +10,7 @@ class CrudRepository {
 
   async get(id) {
     const response = await this.model.findByPk(id);
+
     return response;
   }
 

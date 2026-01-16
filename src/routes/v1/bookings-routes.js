@@ -16,6 +16,11 @@ router.put(
   AuthMiddleware.validateUpdateBooking,
   BookingController.updateBooking
 );
-// router.delete("/bookingId");
+router.delete(
+  "/:bookingId",
+  AuthMiddleware.validateJWT,
+  AuthMiddleware.validateDeleteBooking,
+  BookingController.deleteBooking
+);
 
 module.exports = router;

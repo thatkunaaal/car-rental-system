@@ -94,9 +94,20 @@ function validateUpdateBooking(req, res, next) {
   }
 }
 
+function validateDeleteBooking(req, res, next) {
+  if (!req.params.bookingId) {
+    ErrorResponse.error = { explanation: "Invalid inputs" };
+
+    return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+  }
+
+  next();
+}
+
 module.exports = {
   validateSignupRequest,
   validateJWT,
   validateGetBookings,
   validateUpdateBooking,
+  validateDeleteBooking,
 };
