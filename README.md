@@ -12,7 +12,7 @@ A comprehensive backend API for managing car rental operations. This system prov
 ## Technology Stack
 - **Runtime**: Node.js
 - **Framework**: Express.js
-- **Database**: MySQL/MariaDB (via Sequelize ORM)
+- **Database**: Postgres (via Sequelize ORM)
 - **Authentication**: JWT (JSON Web Tokens)
 - **Logging**: Custom logging configuration
 - **HTTP Status Codes**: http-status-codes library
